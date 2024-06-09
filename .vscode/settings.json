@@ -1,0 +1,21 @@
+{
+  "editor.codeActionsOnSave": { "source.organizeImports": "always", "source.addMissingImports": "always" },
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "extensions.ignoreRecommendations": true,
+  "java.saveActions.organizeImports": true,
+  "redhat.telemetry.enabled": false,
+  "[java]": { "editor.defaultFormatter": "redhat.java" },
+  "[xml]": { "editor.defaultFormatter": "redhat.vscode-xml" },
+  "[markdown]": { "editor.tabSize": 3 },
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+  "prettier.jsxSingleQuote": false,
+  "prettier.singleQuote": false,
+  "prettier.printWidth": 200,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "all",
+  "prettier.useTabs": false
+}
