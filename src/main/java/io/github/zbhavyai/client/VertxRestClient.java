@@ -1,0 +1,104 @@
+package io.github.zbhavyai.client;
+
+import java.time.Duration;
+import java.util.Map;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
+
+import io.github.zbhavyai.models.ErrorResponse;
+import io.smallrye.mutiny.Uni;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.mutiny.core.MultiMap;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.HttpRequest;
+import io.vertx.mutiny.ext.web.client.HttpResponse;
+import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.mutiny.ext.web.codec.BodyCodec;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+
+@ApplicationScoped
+public class VertxRestClient {
+
+    private static final Logger LOGGER = Logger.getLogger(VertxRestClient.class.getSimpleName());
+
+    public final WebClient client;
+    private final Duration timeout;
+
+    @Inject
+    public VertxRestClient(
+            Vertx vertx,
+            @ConfigProperty(name = "timeout.secs", defaultValue = "5") long timeout) {
+
+        this.client = WebClient.create(vertx);
+        this.timeout = Duration.ofSeconds(timeout);
+    }
+
+    public Uni<Response> getRequest(
+            String uri,
+            Map<String, String> headers) {
+        LOGGER.infof("getRequest: uri=\"%s\"", uri);
+
+        HttpRequest<JsonArray> req = this.client
+                .getAbs(uri)
+                .as(BodyCodec.jsonArray())
+                .putHeaders(convertMapToMultiMap(headers));
+
+        return req
+                .send()
+                .onItem().transform(r -> handleSuccess(r))
+                .onFailure().transform(t -> new WebApplicationException(
+                        handleFailure(t.getMessage(), Status.INTERNAL_SERVER_ERROR)))
+                .ifNoItem()
+                .after(timeout)
+                .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
+    }
+
+    public Uni<Response> postRequest(
+            String uri,
+            Map<String, String> headers,
+            JsonObject payload) {
+        LOGGER.infof("postRequest: uri=\"%s\", payload=\"%s\"",
+                uri,
+                payload);
+
+        HttpRequest<JsonObject> req = this.client
+                .postAbs(uri)
+                .as(BodyCodec.jsonObject())
+                .putHeaders(convertMapToMultiMap(headers));
+
+        return req
+                .sendJson(payload)
+                .onItem().transform(r -> handleSuccess(r))
+                .onFailure().transform(t -> new WebApplicationException(
+                        handleFailure(t.getLocalizedMessage(), Status.INTERNAL_SERVER_ERROR)))
+                .ifNoItem()
+                .after(timeout)
+                .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
+    }
+
+    private <T> Response handleSuccess(HttpResponse<T> res) {
+        LOGGER.infof("handleSuccess: status=\"%s\", body=\"%s\"",
+                res.statusCode(),
+                res.body());
+
+        return Response.status(res.statusCode()).entity(res.body()).build();
+    }
+
+    private Response handleFailure(String message, Status statusCode) {
+        LOGGER.errorf("handleFailure: status=\"%s\", error=\"%s\"",
+                statusCode,
+                message);
+
+        return Response.status(statusCode).entity(new ErrorResponse(statusCode, message)).build();
+    }
+
+    private MultiMap convertMapToMultiMap(final Map<String, String> obj) {
+        return MultiMap.caseInsensitiveMultiMap().addAll(obj);
+    }
+}
