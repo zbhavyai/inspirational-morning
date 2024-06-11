@@ -8,6 +8,7 @@ import org.jboss.logging.Logger;
 
 import io.github.zbhavyai.client.VertxRestClient;
 import io.github.zbhavyai.client.ZenquoteParser;
+import io.github.zbhavyai.models.Zenquote;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonArray;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,7 +39,7 @@ public class ZenquoteService {
         this.parser = parser;
     }
 
-    public Uni<?> getTodaysQuote() {
+    public Uni<Zenquote> getTodaysQuote() {
         LOGGER.infof("getTodaysQuote");
 
         return this.restClient
@@ -46,7 +47,7 @@ public class ZenquoteService {
                 .onItem().transform(r -> this.parser.parseZenquoteResponse(r.readEntity(JsonArray.class)));
     }
 
-    public Uni<?> getRandomQuote() {
+    public Uni<Zenquote> getRandomQuote() {
         LOGGER.infof("getRandomQuote");
 
         return this.restClient

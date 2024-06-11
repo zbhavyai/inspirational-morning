@@ -1,5 +1,6 @@
 package io.github.zbhavyai.rest;
 
+import io.github.zbhavyai.models.Zenquote;
 import io.github.zbhavyai.service.ZenquoteService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -21,14 +22,14 @@ public class ZenquoteRest {
     @Path("today/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<?> getTodaysQuote() {
+    public Uni<Zenquote> getTodaysQuote() {
         return this.service.getTodaysQuote();
     }
 
     @Path("random/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<?> getRandomQuote() {
+    public Uni<Zenquote> getRandomQuote() {
         return this.service.getRandomQuote();
     }
 }
