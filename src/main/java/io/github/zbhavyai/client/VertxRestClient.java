@@ -51,7 +51,7 @@ public class VertxRestClient {
 
         return req
                 .send()
-                .onItem().transform(r -> handleSuccess(r))
+                .onItem().transform(r -> handleResponse(r))
                 .onFailure().transform(t -> new WebApplicationException(
                         handleFailure(t.getMessage(), Status.INTERNAL_SERVER_ERROR)))
                 .ifNoItem()
@@ -74,7 +74,7 @@ public class VertxRestClient {
 
         return req
                 .sendJson(payload)
-                .onItem().transform(r -> handleSuccess(r))
+                .onItem().transform(r -> handleResponse(r))
                 .onFailure().transform(t -> new WebApplicationException(
                         handleFailure(t.getLocalizedMessage(), Status.INTERNAL_SERVER_ERROR)))
                 .ifNoItem()
@@ -82,20 +82,24 @@ public class VertxRestClient {
                 .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
     }
 
-    private <T> Response handleSuccess(HttpResponse<T> res) {
-        LOGGER.infof("handleSuccess: status=\"%s\", body=\"%s\"",
+    private <T> Response handleResponse(HttpResponse<T> res) {
+        LOGGER.infof("handleResponse: status=\"%s\", body=\"%s\"",
                 res.statusCode(),
                 res.body());
 
-        return Response.status(res.statusCode()).entity(res.body()).build();
+        if (res.statusCode() >= 200 && res.statusCode() < 300) {
+            return Response.status(res.statusCode()).entity(res.body()).build();
+        } else {
+            throw new WebApplicationException(res.body().toString(), res.statusCode());
+        }
     }
 
-    private Response handleFailure(String message, Status statusCode) {
-        LOGGER.errorf("handleFailure: status=\"%s\", error=\"%s\"",
-                statusCode,
+    private Response handleFailure(String message, Status status) {
+        LOGGER.errorf("handleFailure: status=\"%d\", error=\"%s\"",
+                status.getStatusCode(),
                 message);
 
-        return Response.status(statusCode).entity(new ErrorResponse(statusCode, message)).build();
+        return Response.status(status).entity(new ErrorResponse(status, message)).build();
     }
 
     private MultiMap convertMapToMultiMap(final Map<String, String> obj) {
