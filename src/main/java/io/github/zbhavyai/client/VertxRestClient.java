@@ -8,7 +8,6 @@ import org.jboss.logging.Logger;
 
 import io.github.zbhavyai.models.ErrorResponse;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mutiny.core.MultiMap;
 import io.vertx.mutiny.core.Vertx;
@@ -39,14 +38,15 @@ public class VertxRestClient {
         this.timeout = Duration.ofSeconds(timeout);
     }
 
-    public Uni<Response> getRequest(
+    public <T> Uni<Response> getRequest(
             String uri,
-            Map<String, String> headers) {
+            Map<String, String> headers,
+            Class<T> responseType) {
         LOGGER.infof("getRequest: uri=\"%s\"", uri);
 
-        HttpRequest<JsonArray> req = this.client
+        HttpRequest<T> req = this.client
                 .getAbs(uri)
-                .as(BodyCodec.jsonArray())
+                .as(BodyCodec.json(responseType))
                 .putHeaders(convertMapToMultiMap(headers));
 
         return req
@@ -59,17 +59,18 @@ public class VertxRestClient {
                 .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
     }
 
-    public Uni<Response> postRequest(
+    public <T> Uni<Response> postRequest(
             String uri,
             Map<String, String> headers,
-            JsonObject payload) {
+            JsonObject payload,
+            Class<T> responseType) {
         LOGGER.infof("postRequest: uri=\"%s\", payload=\"%s\"",
                 uri,
                 payload);
 
-        HttpRequest<JsonObject> req = this.client
+        HttpRequest<T> req = this.client
                 .postAbs(uri)
-                .as(BodyCodec.jsonObject())
+                .as(BodyCodec.json(responseType))
                 .putHeaders(convertMapToMultiMap(headers));
 
         return req

@@ -42,7 +42,7 @@ public class ZenquoteService {
         LOGGER.infof("getTodaysQuote");
 
         return this.restClient
-                .getRequest(this.zqTodayEndpoint, createHeader())
+                .getRequest(this.zqTodayEndpoint, createHeader(), JsonArray.class)
                 .onItem().transform(r -> this.parser.parseZenquoteResponse(r.readEntity(JsonArray.class)));
     }
 
@@ -50,7 +50,7 @@ public class ZenquoteService {
         LOGGER.infof("getRandomQuote");
 
         return this.restClient
-                .getRequest(this.zqRandomEndpoint, createHeader())
+                .getRequest(this.zqRandomEndpoint, createHeader(), JsonArray.class)
                 .onItem().transform(r -> this.parser.parseZenquoteResponse(r.readEntity(JsonArray.class)));
     }
 

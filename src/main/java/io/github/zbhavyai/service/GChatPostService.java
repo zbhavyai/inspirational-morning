@@ -39,7 +39,7 @@ public class GChatPostService {
         LOGGER.infof("postMessageToGChat: message=\"%s\"", message);
 
         return this.restClient
-                .postRequest(webhookURL, createHeader(), createMessagePayload(message))
+                .postRequest(webhookURL, createHeader(), createMessagePayload(message), JsonObject.class)
                 .onItem().transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)));
     }
 
