@@ -13,6 +13,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 
 @ApplicationScoped
@@ -40,7 +41,11 @@ public class GChatPostService {
 
         return this.restClient
                 .postRequest(webhookURL, createHeader(), createMessagePayload(message), JsonObject.class)
-                .onItem().transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)));
+                .onItem()
+                .transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)))
+                .onFailure()
+                .transform(t -> new WebApplicationException(
+                        this.parser.parseGChatError(((WebApplicationException) t).getResponse())));
     }
 
     private Map<String, String> createHeader() {
