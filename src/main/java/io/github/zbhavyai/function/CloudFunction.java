@@ -1,13 +1,14 @@
-package io.github.zbhavyai.googlecloudfunctions;
-
-import jakarta.enterprise.context.ApplicationScoped;
+package io.github.zbhavyai.function;
 
 import com.google.cloud.functions.CloudEventsFunction;
 
 import io.cloudevents.CloudEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
+@Named("inspirational-morning")
 @ApplicationScoped
-public class HelloWorldCloudEventsFunction implements CloudEventsFunction {
+public class CloudFunction implements CloudEventsFunction {
 
     @Override
     public void accept(CloudEvent cloudEvent) throws Exception {

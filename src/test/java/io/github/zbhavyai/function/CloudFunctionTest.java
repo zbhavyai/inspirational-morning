@@ -1,15 +1,17 @@
-package io.github.zbhavyai.googlecloudfunctions;
+package io.github.zbhavyai.function;
+
+import static io.restassured.RestAssured.given;
+
+import org.junit.jupiter.api.Test;
 
 import io.quarkus.google.cloud.functions.test.FunctionType;
 import io.quarkus.google.cloud.functions.test.WithFunction;
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-
-import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 @WithFunction(FunctionType.CLOUD_EVENTS)
-class HelloWorldCloudEventsFunctionTest {
+class CloudFunctionTest {
+
     @Test
     void testAccept() {
         given()
