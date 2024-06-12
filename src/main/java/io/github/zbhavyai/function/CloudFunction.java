@@ -1,20 +1,42 @@
 package io.github.zbhavyai.function;
 
+import org.jboss.logging.Logger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.functions.CloudEventsFunction;
 
 import io.cloudevents.CloudEvent;
+import io.github.zbhavyai.service.GreetingsService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @Named("inspirational-morning")
 @ApplicationScoped
 public class CloudFunction implements CloudEventsFunction {
 
+    private static final Logger LOGGER = Logger.getLogger(CloudFunction.class.getSimpleName());
+
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private final GreetingsService greetingService;
+
+    @Inject
+    public CloudFunction(GreetingsService greetingService) {
+        this.greetingService = greetingService;
+        mapper.registerModule(new JavaTimeModule());
+    }
+
     @Override
     public void accept(CloudEvent cloudEvent) throws Exception {
-        System.out.println("Receive event Id: " + cloudEvent.getId());
-        System.out.println("Receive event Subject: " + cloudEvent.getSubject());
-        System.out.println("Receive event Type: " + cloudEvent.getType());
-        System.out.println("Receive event Data: " + new String(cloudEvent.getData().toBytes()));
+        LOGGER.infof("cloudEvent: eventId=\"%s\", subject=\"%s\", type=\"%s\", data=\"%s\"",
+                cloudEvent.getId(),
+                cloudEvent.getSubject(),
+                cloudEvent.getType(),
+                new String(cloudEvent.getData().toBytes()));
+
+        LOGGER.info(mapper.writeValueAsString(cloudEvent));
+
+        this.greetingService.greet().subscribe().with(v -> LOGGER.info("Greeting sent"));
     }
 }
