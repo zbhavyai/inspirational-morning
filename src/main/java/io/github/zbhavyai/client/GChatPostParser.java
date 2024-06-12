@@ -39,7 +39,7 @@ public class GChatPostParser {
     public Response parseGChatError(Response response) {
         // extract the JSON error object from the response which was converted to String
         // by handleResponse method in VertxRestClient
-        JsonObject json = new JsonObject(response.readEntity(ErrorResponse.class).getError());
+        JsonObject json = new JsonObject(response.readEntity(ErrorResponse.class).error());
 
         return Response.status(json.getJsonObject("error").getInteger("code"))
                 .entity(new ErrorResponse(
