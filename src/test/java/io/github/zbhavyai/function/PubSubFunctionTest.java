@@ -10,7 +10,7 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @WithFunction(FunctionType.CLOUD_EVENTS)
-class CloudFunctionTest {
+class PubSubFunctionTest {
 
     @Test
     void testAccept() {

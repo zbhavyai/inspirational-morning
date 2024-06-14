@@ -12,17 +12,17 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-@Named("inspirational-morning")
+@Named("inspirational-morning-pubsub")
 @ApplicationScoped
-public class CloudFunction implements CloudEventsFunction {
+public class PubSubFunction implements CloudEventsFunction {
 
-    private static final Logger LOGGER = Logger.getLogger(CloudFunction.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(PubSubFunction.class.getSimpleName());
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private final GreetingsService greetingService;
 
     @Inject
-    public CloudFunction(GreetingsService greetingService) {
+    public PubSubFunction(GreetingsService greetingService) {
         this.greetingService = greetingService;
         mapper.registerModule(new JavaTimeModule());
     }
