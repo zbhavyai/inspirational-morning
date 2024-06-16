@@ -72,9 +72,6 @@ You can run your application in dev mode that enables live coding using below. D
    gcloud scheduler jobs run schedule-job-inspirational-morning --location="us-central1"
    ```
 
-> [!NOTE]
-> For some yet unknown reason, I have experienced that several few invocations as a GCloud serverless function throw timeout exceptions either when getting a quote from the Zenquote API or when posting the message to the Google Chat webhook. After few failed invocations, the deployed function seems to work fine. This can be avoided by blocking code, which is available in `dev/blocking` branch.
-
 ## Reference guides
 
 - [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)

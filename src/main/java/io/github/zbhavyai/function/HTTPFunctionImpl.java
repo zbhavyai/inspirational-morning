@@ -2,8 +2,6 @@ package io.github.zbhavyai.function;
 
 import java.io.IOException;
 
-import org.jboss.logging.Logger;
-
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
@@ -17,8 +15,6 @@ import jakarta.ws.rs.core.Response.Status;
 @Named("inspirational-morning-http")
 @ApplicationScoped
 public class HTTPFunctionImpl implements HttpFunction {
-
-    private static final Logger LOGGER = Logger.getLogger(HTTPFunctionImpl.class.getSimpleName());
 
     private final GreetingsService greetingService;
 
@@ -41,6 +37,6 @@ public class HTTPFunctionImpl implements HttpFunction {
                     }
                 })
                 .onFailure().recoverWithNull()
-                .subscribe().with(v -> LOGGER.info("Greeting sent"));
+                .await().indefinitely();
     }
 }

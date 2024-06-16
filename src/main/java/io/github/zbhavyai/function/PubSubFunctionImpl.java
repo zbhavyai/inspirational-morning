@@ -31,6 +31,6 @@ public class PubSubFunctionImpl implements CloudEventsFunction {
                 cloudEvent.getType(),
                 new String(cloudEvent.getData().toBytes()));
 
-        this.greetingService.greet().subscribe().with(v -> LOGGER.info("Greeting sent"));
+        this.greetingService.greet().await().indefinitely();
     }
 }
