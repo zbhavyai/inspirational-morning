@@ -66,6 +66,12 @@ curl --silent --request POST --location http://localhost:3005/api/greet | jq
       --set-env-vars=ZONEID="Pacific/Auckland",GSPACE_WEBHOOK="https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
    ```
 
+4. [OPTIONAL] Trigger the job manually
+
+   ```shell
+   gcloud scheduler jobs run schedule-job-inspirational-morning --location="us-central1"
+   ```
+
 > [!NOTE]
 > For some yet unknown reason, I have experienced that several few invocations as a GCloud serverless function throw timeout exceptions either when getting a quote from the Zenquote API or when posting the message to the Google Chat webhook. After few failed invocations, the deployed function seems to work fine.
 
