@@ -30,7 +30,7 @@ You can run your application in dev mode that enables live coding using below. D
    curl --silent --request POST --location http://localhost:3005/api/greet | jq
    ```
 
-## Deploy to Google Cloud
+## Deploy to Google Cloud Functions
 
 1. Create up a Pub/Sub topic.
 
@@ -49,7 +49,7 @@ You can run your application in dev mode that enables live coding using below. D
       --location="us-central1"
    ```
 
-3. Deploy the application to Google Cloud Functions
+3. Deploy the application as a Cloud Function
 
    ```shell
    gcloud functions deploy inspirational-morning \
@@ -72,10 +72,26 @@ You can run your application in dev mode that enables live coding using below. D
    gcloud scheduler jobs run schedule-job-inspirational-morning --location="us-central1"
    ```
 
+## Google Cloud Clean up
+
+1. Delete the function
+
+   ```shell
+   gcloud functions delete inspirational-morning --region=us-central1
+   ```
+
+2. Delete the job schedule
+
+   ```shell
+   gcloud scheduler jobs delete schedule-job-inspirational-morning --location=us-central1
+   ```
+
+3. Delete the topic
+
+   ```shell
+   gcloud pubsub topics delete topic-inspirational-morning
+   ```
+
 ## Reference guides
 
 - [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-
-- [Quarkus extension for GCloud Functions](https://quarkus.io/guides/gcp-functions)
-
-- [Scheduling function](https://cloud.google.com/scheduler/docs/tut-gcf-pub-sub)
