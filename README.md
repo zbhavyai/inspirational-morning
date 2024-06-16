@@ -65,6 +65,9 @@ curl --silent --request POST --location http://localhost:3005/api/greet | jq
       --source=target/deployment
    ```
 
+> [!NOTE]
+> For some yet unknown reason, I have experienced that several few invocations as a GCloud serverless function throw timeout exceptions either when getting a quote from the Zenquote API or when posting the message to the Google Chat webhook. After few failed invocations, the deployed function seems to work fine.
+
 ## Reference guides
 
 - [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
