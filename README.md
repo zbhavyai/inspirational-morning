@@ -26,9 +26,9 @@ You can run your application in dev mode that enables live coding using below. D
 
 3. Once the JAR is running, hit the exposed ReST endpoint to send the greeting
 
-```shell
-curl --silent --request POST --location http://localhost:3005/api/greet | jq
-```
+   ```shell
+   curl --silent --request POST --location http://localhost:3005/api/greet | jq
+   ```
 
 ## Deploy to Google Cloud
 
@@ -45,7 +45,7 @@ curl --silent --request POST --location http://localhost:3005/api/greet | jq
       --schedule="0 8 * * 0-5" \
       --topic=topic-inspirational-morning \
       --message-body="job is triggered" \
-      --time-zone="America/Edmonton" \
+      --time-zone="Pacific/Auckland" \
       --location="us-central1"
    ```
 
@@ -73,7 +73,7 @@ curl --silent --request POST --location http://localhost:3005/api/greet | jq
    ```
 
 > [!NOTE]
-> For some yet unknown reason, I have experienced that several few invocations as a GCloud serverless function throw timeout exceptions either when getting a quote from the Zenquote API or when posting the message to the Google Chat webhook. After few failed invocations, the deployed function seems to work fine.
+> For some yet unknown reason, I have experienced that several few invocations as a GCloud serverless function throw timeout exceptions either when getting a quote from the Zenquote API or when posting the message to the Google Chat webhook. After few failed invocations, the deployed function seems to work fine. This can be avoided by blocking code, which is available in `dev/blocking` branch.
 
 ## Reference guides
 
