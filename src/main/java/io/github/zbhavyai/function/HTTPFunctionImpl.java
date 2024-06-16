@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.jboss.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
@@ -18,23 +16,19 @@ import jakarta.ws.rs.core.Response.Status;
 
 @Named("inspirational-morning-http")
 @ApplicationScoped
-public class HTTPTriggeredFunction implements HttpFunction {
+public class HTTPFunctionImpl implements HttpFunction {
 
-    private static final Logger LOGGER = Logger.getLogger(HTTPTriggeredFunction.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(HTTPFunctionImpl.class.getSimpleName());
 
-    private static final ObjectMapper mapper = new ObjectMapper();
     private final GreetingsService greetingService;
 
     @Inject
-    public HTTPTriggeredFunction(GreetingsService greetingService) {
+    public HTTPFunctionImpl(GreetingsService greetingService) {
         this.greetingService = greetingService;
-        mapper.registerModule(new JavaTimeModule());
     }
 
     @Override
     public void service(HttpRequest request, HttpResponse response) throws Exception {
-        LOGGER.infof("request: \"%s\"", mapper.writeValueAsString(request));
-
         response.getWriter().append("Hello, World!");
 
         this.greetingService.greet()

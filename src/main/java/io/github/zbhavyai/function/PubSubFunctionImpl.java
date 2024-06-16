@@ -2,8 +2,6 @@ package io.github.zbhavyai.function;
 
 import org.jboss.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.functions.CloudEventsFunction;
 
 import io.cloudevents.CloudEvent;
@@ -14,17 +12,15 @@ import jakarta.inject.Named;
 
 @Named("inspirational-morning-pubsub")
 @ApplicationScoped
-public class PubSubFunction implements CloudEventsFunction {
+public class PubSubFunctionImpl implements CloudEventsFunction {
 
-    private static final Logger LOGGER = Logger.getLogger(PubSubFunction.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(PubSubFunctionImpl.class.getSimpleName());
 
-    private static final ObjectMapper mapper = new ObjectMapper();
     private final GreetingsService greetingService;
 
     @Inject
-    public PubSubFunction(GreetingsService greetingService) {
+    public PubSubFunctionImpl(GreetingsService greetingService) {
         this.greetingService = greetingService;
-        mapper.registerModule(new JavaTimeModule());
     }
 
     @Override
@@ -34,8 +30,6 @@ public class PubSubFunction implements CloudEventsFunction {
                 cloudEvent.getSubject(),
                 cloudEvent.getType(),
                 new String(cloudEvent.getData().toBytes()));
-
-        LOGGER.info(mapper.writeValueAsString(cloudEvent));
 
         this.greetingService.greet().subscribe().with(v -> LOGGER.info("Greeting sent"));
     }
