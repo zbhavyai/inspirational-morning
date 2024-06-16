@@ -30,6 +30,41 @@ Once the JAR is running, hit the exposed ReST endpoint to send the greeting
 curl --silent --request POST --location http://localhost:3005/api/greet | jq
 ```
 
+## Deploy to Google Cloud
+
+1. Create up a Pub/Sub topic.
+
+   ```shell
+   gcloud pubsub topics create topic-inspirational-morning
+   ```
+
+2. Create a cron job schedule for every weekday at 08:00.
+
+   ```shell
+   gcloud scheduler jobs create pubsub schedule-job-inspirational-morning \
+      --schedule="0 8 * * 0-5" \
+      --topic=topic-inspirational-morning \
+      --message-body="job is triggered" \
+      --time-zone="America/Edmonton" \
+      --location="us-central1"
+   ```
+
+3. Deploy the application to Google Cloud Functions
+
+   ```shell
+   gcloud functions deploy inspirational-morning \
+      --gen2 \
+      --allow-unauthenticated \
+      --trigger-topic=topic-inspirational-morning \
+      --region=us-central1 \
+      --timeout=540s \
+      --entry-point=io.quarkus.gcp.functions.QuarkusCloudEventsFunction \
+      --runtime=java17 \
+      --memory=256MiB \
+      --cpu=0.167 \
+      --source=target/deployment
+   ```
+
 ## Reference guides
 
 - [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
