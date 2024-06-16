@@ -12,14 +12,27 @@ You can run your application in dev mode that enables live coding using below. D
 
 ## Packaging and running
 
-The application can be packaged and resulting JAR can be run using
+Create the JAR
 
 ```shell
 ./mvnw clean package -DskipTests
-java -jar target/inspirational-morning-*.jar
+```
+
+Run the JAR with specific GChat webhook URL and a time zone [optional]. By default, the the `America/Edmonton` time zone is used.
+
+```shell
+java -Dzoneid="Pacific/Auckland" -Dgspace.webhook="<GCHAT-WEBHOOK-URL> -jar target/inspirational-morning-*.jar"
+```
+
+Once the JAR is running, hit the exposed ReST endpoint to send the greeting
+
+```shell
+curl --silent --request POST --location http://localhost:3005/api/greet | jq
 ```
 
 ## Reference guides
+
+- [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 - [Quarkus extension for GCloud Functions](https://quarkus.io/guides/gcp-functions)
 
