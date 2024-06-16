@@ -62,7 +62,8 @@ curl --silent --request POST --location http://localhost:3005/api/greet | jq
       --runtime=java17 \
       --memory=256MiB \
       --cpu=0.167 \
-      --source=target/deployment
+      --source=target/deployment \
+      --set-env-vars=ZONEID="Pacific/Auckland",GSPACE_WEBHOOK="https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
    ```
 
 > [!NOTE]
