@@ -32,17 +32,17 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- support for google cloud functions and cloudevents -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-google-cloud-functions</artifactId>
-        </dependency>
         <!-- support for cdi -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
-        <!-- support for rest server and jakarta restful web services-->
+        <!-- support for rest server -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest</artifactId>
+        </dependency>
+        <!-- support for jackson serialization deserialization -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
@@ -52,20 +52,27 @@
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>smallrye-mutiny-vertx-web-client</artifactId>
         </dependency>
-        <!-- support for tests -->
+        <!-- support for google cloud functions and cloudevents -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-google-cloud-functions</artifactId>
+        </dependency>
+        <!-- support for junit tests -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-test-google-cloud-functions</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- support for testing http endpoints -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- support for google cloud functions tests -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-test-google-cloud-functions</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
