@@ -52,11 +52,10 @@ public class VertxRestClient {
         return req
                 .send()
                 .onItem().transform(r -> handleResponse(r))
-                .onFailure().transform(t -> new WebApplicationException(
-                        handleFailure(t.getMessage(), Status.INTERNAL_SERVER_ERROR)))
+                .onFailure().transform(t -> handleFailure(t))
                 .ifNoItem()
                 .after(timeout)
-                .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
+                .failWith(handleTimeout());
     }
 
     public <T> Uni<Response> postRequest(
@@ -76,11 +75,10 @@ public class VertxRestClient {
         return req
                 .sendJson(payload)
                 .onItem().transform(r -> handleResponse(r))
-                .onFailure().transform(t -> new WebApplicationException(
-                        handleFailure(t.getLocalizedMessage(), Status.INTERNAL_SERVER_ERROR)))
+                .onFailure().transform(t -> handleFailure(t))
                 .ifNoItem()
                 .after(timeout)
-                .failWith(new WebApplicationException("Request timeout", Status.GATEWAY_TIMEOUT));
+                .failWith(handleTimeout());
     }
 
     private <T> Response handleResponse(HttpResponse<T> res) {
@@ -91,16 +89,46 @@ public class VertxRestClient {
         if (res.statusCode() >= 200 && res.statusCode() < 300) {
             return Response.status(res.statusCode()).entity(res.body()).build();
         } else {
-            throw new WebApplicationException(res.body().toString(), res.statusCode());
+            throw new WebApplicationException(
+                    res.body() == null ? "null" : res.body().toString(),
+                    res.statusCode());
         }
     }
 
-    private Response handleFailure(String message, Status status) {
-        LOGGER.errorf("handleFailure: status=\"%d\", error=\"%s\"",
-                status.getStatusCode(),
-                message);
+    private Throwable handleFailure(Throwable t) {
+        if (t instanceof WebApplicationException) {
+            WebApplicationException tw = (WebApplicationException) t;
 
-        return Response.status(status).entity(new ErrorResponse(status, message)).build();
+            LOGGER.errorf("handleFailure: statusCode=\"%s\", statusMessage=\"%s\" error=\"%s\"",
+                    tw.getResponse().getStatus(),
+                    tw.getResponse().getStatusInfo().getReasonPhrase(),
+                    tw.getLocalizedMessage());
+
+            return new WebApplicationException(
+                    Response
+                            .status(tw.getResponse().getStatus())
+                            .entity(new ErrorResponse(
+                                    Status.fromStatusCode(tw.getResponse().getStatus()),
+                                    t.getLocalizedMessage()))
+                            .build());
+        } else {
+            LOGGER.errorf("handleFailure: error=\"%s\"", t.getLocalizedMessage());
+
+            return new WebApplicationException(
+                    Response
+                            .status(Status.INTERNAL_SERVER_ERROR)
+                            .entity(new ErrorResponse(Status.INTERNAL_SERVER_ERROR,
+                                    t.getLocalizedMessage()))
+                            .build());
+        }
+    }
+
+    private Throwable handleTimeout() {
+        return new WebApplicationException(
+                Response
+                        .status(Status.GATEWAY_TIMEOUT)
+                        .entity(new ErrorResponse(Status.GATEWAY_TIMEOUT, "Request timeout"))
+                        .build());
     }
 
     private MultiMap convertMapToMultiMap(final Map<String, String> obj) {
