@@ -30,6 +30,14 @@ You can run your application in dev mode that enables live coding using below. D
    curl --silent --request POST --location http://localhost:3005/api/greet | jq
    ```
 
+## Testing the application
+
+1. Run the tests
+
+   ```shell
+   ./mvnw test -Dgspace.webhook="<GCHAT-WEBHOOK-URL>"
+   ```
+
 ## Deploy to Google Cloud Functions
 
 1. Create up a Pub/Sub topic.
