@@ -1,0 +1,20 @@
+name: inspirational-morning
+
+services:
+    inspirational-morning:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        image: inspirational-morning:1.0.0
+        container_name: inspirational-morning
+        restart: unless-stopped
+        env_file:
+            - .env
+        ports:
+            - "3005:3005"
+        networks:
+            - net
+
+networks:
+    net:
+        driver: bridge
