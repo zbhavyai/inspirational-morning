@@ -1,8 +1,13 @@
 package io.github.zbhavyai.models;
 
-import jakarta.ws.rs.core.Response.Status;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
-public record ErrorResponse(
-        Status status,
-        String error) {
+@RegisterForReflection
+public record ErrorResponse(@JsonProperty("error") String errorMessage) {
+
+    public static ErrorResponse create(String message) {
+        return new ErrorResponse(message);
+    }
 }
+

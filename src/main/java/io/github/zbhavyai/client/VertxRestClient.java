@@ -1,11 +1,5 @@
 package io.github.zbhavyai.client;
 
-import java.time.Duration;
-import java.util.Map;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logging.Logger;
-
 import io.github.zbhavyai.models.ErrorResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
@@ -20,6 +14,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
+
+import java.time.Duration;
+import java.util.Map;
 
 @ApplicationScoped
 public class VertxRestClient {
@@ -107,9 +106,7 @@ public class VertxRestClient {
             return new WebApplicationException(
                     Response
                             .status(tw.getResponse().getStatus())
-                            .entity(new ErrorResponse(
-                                    Status.fromStatusCode(tw.getResponse().getStatus()),
-                                    t.getLocalizedMessage()))
+                            .entity(new ErrorResponse(t.getLocalizedMessage()))
                             .build());
         } else {
             LOGGER.errorf("handleFailure: error=\"%s\"", t.getLocalizedMessage());
@@ -117,8 +114,7 @@ public class VertxRestClient {
             return new WebApplicationException(
                     Response
                             .status(Status.INTERNAL_SERVER_ERROR)
-                            .entity(new ErrorResponse(Status.INTERNAL_SERVER_ERROR,
-                                    t.getLocalizedMessage()))
+                            .entity(new ErrorResponse(t.getLocalizedMessage()))
                             .build());
         }
     }
@@ -127,7 +123,7 @@ public class VertxRestClient {
         return new WebApplicationException(
                 Response
                         .status(Status.GATEWAY_TIMEOUT)
-                        .entity(new ErrorResponse(Status.GATEWAY_TIMEOUT, "Request timeout"))
+                        .entity(new ErrorResponse("Request timeout"))
                         .build());
     }
 

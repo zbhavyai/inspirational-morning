@@ -1,11 +1,5 @@
 package io.github.zbhavyai.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.logging.Logger;
-
 import io.github.zbhavyai.client.GChatPostParser;
 import io.github.zbhavyai.client.VertxRestClient;
 import io.github.zbhavyai.models.GChatMsgPostResponse;
@@ -13,8 +7,12 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ApplicationScoped
 public class GChatPostService {
@@ -42,10 +40,10 @@ public class GChatPostService {
         return this.restClient
                 .postRequest(webhookURL, createHeader(), createMessagePayload(message), JsonObject.class)
                 .onItem()
-                .transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)))
-                .onFailure()
-                .transform(t -> new WebApplicationException(
-                        this.parser.parseGChatError(((WebApplicationException) t).getResponse())));
+                .transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)));
+//                .onFailure()
+//                .transform(t -> new WebApplicationException(
+//                        this.parser.parseGChatError(((WebApplicationException) t).getResponse())));
     }
 
     private Map<String, String> createHeader() {
