@@ -14,9 +14,6 @@ make dev
 
 1. Get the desired GChat webhook URL. You can register a webhook by following the [Google Chat webhooks documentation](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook).
 
-   > [!NOTE]
-   > The webhook URL should be in the format `https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN`.
-
 2. Save the webhook URL, and optionally a time zone, in the [.env](./.env) file in the root of the project. For example:
 
    ```env
