@@ -7,9 +7,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import java.time.ZoneId;
-
-
 @Path("/weekday")
 public class WeekdayRest {
 
@@ -23,6 +20,6 @@ public class WeekdayRest {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getWeekDay() {
-        return this.service.getWeekDay(ZoneId.systemDefault().getId());
+        return this.service.getWeekDay();
     }
 }

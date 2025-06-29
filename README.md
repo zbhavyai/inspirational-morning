@@ -7,7 +7,7 @@ Send a good morning message to your Google Chat webhook. The message would inclu
 You can run your application in dev mode that enables live coding using below. Dev UI should be accessible at [http://localhost:3005/q/dev-ui/](http://localhost:3005/q/dev-ui/).
 
 ```shell
-./mvnw compile quarkus:dev
+./mvnw quarkus:dev
 ```
 
 ## Packaging and running
@@ -21,7 +21,7 @@ You can run your application in dev mode that enables live coding using below. D
 2. Run the JAR with specific GChat webhook URL and a time zone [optional]. By default, the `America/Edmonton` time zone is used.
 
    ```shell
-   java -Dzoneid="Pacific/Auckland" -Dgspace.webhook="<GCHAT-WEBHOOK-URL>" -jar target/inspirational-morning-*.jar
+   java -Dtimezone="Pacific/Auckland" -Dgspace.webhook="<GCHAT-WEBHOOK-URL>" -jar target/inspirational-morning-*.jar
    ```
 
 3. Once the JAR is running, hit the exposed ReST endpoint to send the greeting
@@ -63,7 +63,7 @@ You can run your application in dev mode that enables live coding using below. D
       --memory=256MiB \
       --cpu=0.167 \
       --source=target/deployment \
-      --set-env-vars=ZONEID="Pacific/Auckland",GSPACE_WEBHOOK="https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
+      --set-env-vars=TIMEZONE="Pacific/Auckland",GSPACE_WEBHOOK="https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
    ```
 
 4. [OPTIONAL] Trigger the job manually

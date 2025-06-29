@@ -4,7 +4,6 @@ import io.github.zbhavyai.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class GreetingsService {
@@ -12,26 +11,23 @@ public class GreetingsService {
     private final WeekdayService weekdayService;
     private final ZenQuotesService zenQuotesService;
     private final GChatPostService gchatService;
-    private final String zoneid;
 
     @Inject
     public GreetingsService(
         WeekdayService weekdayService,
         ZenQuotesService zenQuotesService,
-        GChatPostService gchatService,
-        @ConfigProperty(name = "zoneid") String zoneid) {
+        GChatPostService gchatService) {
 
         this.weekdayService = weekdayService;
         this.zenQuotesService = zenQuotesService;
         this.gchatService = gchatService;
-        this.zoneid = zoneid;
     }
 
     public Uni<GChatMsgResponse> greet() {
         return this.zenQuotesService.getRandomQuote()
             .chain(quote -> this.gchatService.postMessageToGChat(
                 this.createGreetMessage(
-                    this.weekdayService.getWeekDay(zoneid),
+                    this.weekdayService.getWeekDay(),
                     quote.quote(),
                     quote.author())));
     }
