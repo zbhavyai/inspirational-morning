@@ -1,6 +1,6 @@
 package io.github.zbhavyai.rest;
 
-import io.github.zbhavyai.models.GChatMsgPostResponse;
+import io.github.zbhavyai.models.GChatMsgResponse;
 import io.github.zbhavyai.service.GChatPostService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -20,11 +20,11 @@ public class GChatPostRest {
         this.service = service;
     }
 
-    @Path("post/")
+    @Path("/post")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<GChatMsgPostResponse> postMessageToGChat(final String message) {
+    public Uni<GChatMsgResponse> postMessageToGChat(final String message) {
         return this.service.postMessageToGChat(message);
     }
 }

@@ -1,6 +1,6 @@
 package io.github.zbhavyai.rest;
 
-import io.github.zbhavyai.models.GChatMsgPostResponse;
+import io.github.zbhavyai.models.GChatMsgResponse;
 import io.github.zbhavyai.service.GreetingsService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -21,7 +21,7 @@ public class GreetingsRest {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<GChatMsgPostResponse> greet() {
+    public Uni<GChatMsgResponse> greet() {
         return this.service.greet();
     }
 }

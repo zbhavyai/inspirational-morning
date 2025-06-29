@@ -1,60 +1,47 @@
 package io.github.zbhavyai.service;
 
-import io.github.zbhavyai.client.GChatPostParser;
-import io.github.zbhavyai.client.VertxRestClient;
-import io.github.zbhavyai.models.GChatMsgPostResponse;
+import io.github.zbhavyai.client.GChatClient;
+import io.github.zbhavyai.models.GChatMsgRequest;
+import io.github.zbhavyai.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.MediaType;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @ApplicationScoped
 public class GChatPostService {
 
     private static final Logger LOGGER = Logger.getLogger(GChatPostService.class.getSimpleName());
 
-    private final VertxRestClient restClient;
-    private final GChatPostParser parser;
-    private final String webhookURL;
+    @RestClient
+    private GChatClient gChatClient;
 
-    @Inject
-    public GChatPostService(
-            VertxRestClient restClient,
-            GChatPostParser parser,
-            @ConfigProperty(name = "gspace.webhook") String webhookURL) {
-
-        this.restClient = restClient;
-        this.parser = parser;
-        this.webhookURL = webhookURL;
-    }
-
-    public Uni<GChatMsgPostResponse> postMessageToGChat(String message) {
+    public Uni<GChatMsgResponse> postMessageToGChat(String message) {
         LOGGER.infof("postMessageToGChat: message=\"%s\"", message);
 
-        return this.restClient
-                .postRequest(webhookURL, createHeader(), createMessagePayload(message), JsonObject.class)
-                .onItem()
-                .transform(r -> this.parser.parseGChatMsgPostResponse(r.readEntity(JsonObject.class)));
-//                .onFailure()
-//                .transform(t -> new WebApplicationException(
-//                        this.parser.parseGChatError(((WebApplicationException) t).getResponse())));
+        return gChatClient
+            .postMessage(new GChatMsgRequest(message))
+            .onItem()
+            .transform(this::parseGChatMsgResponse)
+            .onFailure()
+            .invoke(t -> LOGGER.errorf("Error while posting message: %s", t.getMessage()))
+            .onFailure().recoverWithItem(GChatMsgResponse.fallbackResponse());
     }
 
-    private Map<String, String> createHeader() {
-        Map<String, String> header = new HashMap<>();
-        header.put("Content-Type", MediaType.APPLICATION_JSON);
-        header.put("Accept", MediaType.APPLICATION_JSON);
-        return header;
-    }
+    private GChatMsgResponse parseGChatMsgResponse(JsonObject json) {
+        if (json == null || json.isEmpty()) {
+            return GChatMsgResponse.fallbackResponse();
+        }
 
-    private JsonObject createMessagePayload(String text) {
-        return new JsonObject()
-                .put("text", text);
+        try {
+            return new GChatMsgResponse(
+                json.getString("name"),
+                json.getString("text"),
+                json.getJsonObject("thread").getString("name"),
+                json.getJsonObject("space").getString("name"));
+        } catch (Exception e) {
+            return GChatMsgResponse.fallbackResponse();
+        }
     }
 }

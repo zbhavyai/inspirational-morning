@@ -1,11 +1,10 @@
 package io.github.zbhavyai.service;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
-import io.github.zbhavyai.models.GChatMsgPostResponse;
+import io.github.zbhavyai.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class GreetingsService {
@@ -17,10 +16,10 @@ public class GreetingsService {
 
     @Inject
     public GreetingsService(
-            WeekdayService weekdayService,
-            ZenquoteService zenquoteService,
-            GChatPostService gchatService,
-            @ConfigProperty(name = "zoneid") String zoneid) {
+        WeekdayService weekdayService,
+        ZenquoteService zenquoteService,
+        GChatPostService gchatService,
+        @ConfigProperty(name = "zoneid") String zoneid) {
 
         this.weekdayService = weekdayService;
         this.zenquoteService = zenquoteService;
@@ -28,13 +27,13 @@ public class GreetingsService {
         this.zoneid = zoneid;
     }
 
-    public Uni<GChatMsgPostResponse> greet() {
+    public Uni<GChatMsgResponse> greet() {
         return this.zenquoteService.getRandomQuote()
-                .chain(quote -> this.gchatService.postMessageToGChat(
-                        this.createGreetMessage(
-                                this.weekdayService.getWeekDay(zoneid),
-                                quote.quote(),
-                                quote.author())));
+            .chain(quote -> this.gchatService.postMessageToGChat(
+                this.createGreetMessage(
+                    this.weekdayService.getWeekDay(zoneid),
+                    quote.quote(),
+                    quote.author())));
     }
 
     private String createGreetMessage(String weekday, String quote, String author) {

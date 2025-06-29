@@ -19,14 +19,14 @@ public class ZenquoteRest {
         this.service = service;
     }
 
-    @Path("today/")
+    @Path("/today")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Zenquote> getTodayQuote() {
         return this.service.getTodayQuote();
     }
 
-    @Path("random/")
+    @Path("/random")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Zenquote> getRandomQuote() {
