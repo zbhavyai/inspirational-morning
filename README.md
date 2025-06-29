@@ -7,27 +7,39 @@ Send a good morning message to your Google Chat webhook. The message would inclu
 You can run your application in dev mode that enables live coding using below. Dev UI should be accessible at [http://localhost:3005/q/dev-ui/](http://localhost:3005/q/dev-ui/).
 
 ```shell
-./mvnw quarkus:dev
+make dev
 ```
 
-## Packaging and running
+## Local packaging and running
 
-1. Create the JAR
+1. Get the desired GChat webhook URL. You can register a webhook by following the [Google Chat webhooks documentation](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook).
 
-   ```shell
-   ./mvnw clean package -DskipTests
+   > [!NOTE]
+   > The webhook URL should be in the format `https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN`.
+
+2. Save the webhook URL, and optionally a time zone, in the [.env](./.env) file in the root of the project. For example:
+
+   ```env
+   GSPACE_WEBHOOK=https://chat.googleapis.com/v1/spaces/XXXXXXXXXX/messages?key=YYYYYYYYYY&token=ZZZZZZZZZZ
+   TIMEZONE=Pacific/Midway
    ```
 
-2. Run the JAR with specific GChat webhook URL and a time zone [optional]. By default, the `America/Edmonton` time zone is used.
+3. Build and run the application in a container.
 
    ```shell
-   java -Dtimezone="Pacific/Auckland" -Dgspace.webhook="<GCHAT-WEBHOOK-URL>" -jar target/inspirational-morning-*.jar
+   make container-run
    ```
 
-3. Once the JAR is running, hit the exposed ReST endpoint to send the greeting
+4. Once the container is running, hit the exposed ReST endpoint to send the greeting
 
    ```shell
    curl --silent --request POST --location http://localhost:3005/api/greet | jq
+   ```
+
+5. To cleanup, stop and remove the container
+
+   ```shell
+   make container-destroy
    ```
 
 ## Deploy to Google Cloud Functions
@@ -94,4 +106,4 @@ You can run your application in dev mode that enables live coding using below. D
 
 ## Reference guides
 
-- [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+-  [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
