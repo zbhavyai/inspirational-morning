@@ -12,15 +12,17 @@ public class ExceptionMapper {
 
     @ServerExceptionMapper(ServiceUnavailableException.class)
     public Response handleServiceUnavailable(ServiceUnavailableException e) {
-        return Response
-            .status(Response.Status.SERVICE_UNAVAILABLE)
-            .entity(ErrorResponse.create(Response.Status.SERVICE_UNAVAILABLE.getReasonPhrase())).build();
+
+        return createErrorResponse(Response.Status.SERVICE_UNAVAILABLE);
     }
 
     @ServerExceptionMapper(WebApplicationException.class)
-    public Response handleServiceUnavailable(WebApplicationException e) {
-        return Response
-            .status(Response.Status.TOO_MANY_REQUESTS)
-            .entity(ErrorResponse.create(Response.Status.TOO_MANY_REQUESTS.getReasonPhrase())).build();
+    public Response handleWebApplication(WebApplicationException e) {
+
+        return createErrorResponse(e.getResponse().getStatusInfo().toEnum());
+    }
+
+    private static Response createErrorResponse(Response.Status status) {
+        return Response.status(status).entity(ErrorResponse.create(status.getReasonPhrase())).build();
     }
 }
