@@ -6,6 +6,7 @@ import io.github.zbhavyai.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.ServiceUnavailableException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -26,7 +27,7 @@ public class GChatPostService {
             .transform(this::parseGChatMsgResponse)
             .onFailure()
             .invoke(t -> LOGGER.errorf("Error while posting message: %s", t.getMessage()))
-            .onFailure().recoverWithItem(GChatMsgResponse.fallbackResponse());
+            .onFailure().transform(t -> new ServiceUnavailableException());
     }
 
     private GChatMsgResponse parseGChatMsgResponse(JsonObject json) {

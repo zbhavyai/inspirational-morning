@@ -6,6 +6,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -24,7 +25,7 @@ public class ZenQuotesService {
             .onItem()
             .transform(this::parseZenQuotesResponse)
             .onFailure()
-            .recoverWithItem(ZenQuote.fallbackQuote());
+            .transform(t -> new WebApplicationException());
     }
 
     public Uni<ZenQuote> getRandomQuote() {
@@ -34,7 +35,7 @@ public class ZenQuotesService {
             .onItem()
             .transform(this::parseZenQuotesResponse)
             .onFailure()
-            .recoverWithItem(ZenQuote.fallbackQuote());
+            .transform(t -> new WebApplicationException());
     }
 
     private ZenQuote parseZenQuotesResponse(JsonArray arr) {
