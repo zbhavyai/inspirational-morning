@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "zenquotes-api")
-public interface ZenquoteClient {
+public interface ZenQuotesClient {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

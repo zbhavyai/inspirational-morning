@@ -10,25 +10,25 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public class GreetingsService {
 
     private final WeekdayService weekdayService;
-    private final ZenquoteService zenquoteService;
+    private final ZenQuotesService zenQuotesService;
     private final GChatPostService gchatService;
     private final String zoneid;
 
     @Inject
     public GreetingsService(
         WeekdayService weekdayService,
-        ZenquoteService zenquoteService,
+        ZenQuotesService zenQuotesService,
         GChatPostService gchatService,
         @ConfigProperty(name = "zoneid") String zoneid) {
 
         this.weekdayService = weekdayService;
-        this.zenquoteService = zenquoteService;
+        this.zenQuotesService = zenQuotesService;
         this.gchatService = gchatService;
         this.zoneid = zoneid;
     }
 
     public Uni<GChatMsgResponse> greet() {
-        return this.zenquoteService.getRandomQuote()
+        return this.zenQuotesService.getRandomQuote()
             .chain(quote -> this.gchatService.postMessageToGChat(
                 this.createGreetMessage(
                     this.weekdayService.getWeekDay(zoneid),
