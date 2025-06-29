@@ -55,10 +55,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.smallrye.reactive</groupId>
-            <artifactId>smallrye-mutiny-vertx-web-client</artifactId>
-        </dependency>
         <!-- support for google cloud functions and cloudevents -->
         <dependency>
             <groupId>io.quarkus</groupId>
