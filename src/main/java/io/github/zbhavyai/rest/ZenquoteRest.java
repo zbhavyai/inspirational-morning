@@ -22,8 +22,8 @@ public class ZenquoteRest {
     @Path("today/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Zenquote> getTodaysQuote() {
-        return this.service.getTodaysQuote();
+    public Uni<Zenquote> getTodayQuote() {
+        return this.service.getTodayQuote();
     }
 
     @Path("random/")

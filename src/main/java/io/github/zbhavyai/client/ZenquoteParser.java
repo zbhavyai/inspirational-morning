@@ -3,9 +3,9 @@ package io.github.zbhavyai.client;
 import io.github.zbhavyai.models.Zenquote;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class ZenquoteParser {
 
     public Zenquote parseZenquoteResponse(JsonArray arr) {
@@ -21,8 +21,8 @@ public class ZenquoteParser {
         }
 
         return new Zenquote(
-                json.getString("a"),
-                json.getString("q"),
-                json.getString("h"));
+            json.getString("a"),
+            json.getString("q"),
+            json.getString("h"));
     }
 }
