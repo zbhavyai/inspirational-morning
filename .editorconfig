@@ -15,6 +15,7 @@ max_line_length = 80
 max_line_length = 200
 
 [*.md]
+indent_size = 3
 max_line_length = 999
 
 [Makefile]
