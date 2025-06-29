@@ -9,7 +9,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/api/zenquote/")
+@Path("/zenquote")
 public class ZenquoteRest {
 
     private final ZenquoteService service;

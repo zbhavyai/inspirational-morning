@@ -10,7 +10,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/api/gchat/")
+@Path("/gchat")
 public class GChatPostRest {
 
     private final GChatPostService service;
