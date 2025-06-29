@@ -1,7 +1,7 @@
 CONTAINER_ENGINE := $(shell if command -v podman &>/dev/null; then echo podman; else echo docker; fi)
 DEPENDENCIES := $(CONTAINER_ENGINE) javac
 
-.PHONY: check-deps clean dev container-build container-run container-stop container-logs container-destroy help
+.PHONY: check-deps clean dev build container-build container-run container-stop container-logs container-destroy help
 
 check-deps:
 	@for cmd in $(DEPENDENCIES); do \
@@ -17,6 +17,9 @@ clean: check-deps
 
 dev: check-deps
 	@./mvnw quarkus:dev
+
+build: check-deps
+	@./mvnw package
 
 container-build: check-deps
 	@$(CONTAINER_ENGINE) compose build
@@ -38,6 +41,7 @@ help:
 	@echo "  check-deps        - Check for required system dependencies"
 	@echo "  clean             - Clean build artifacts"
 	@echo "  dev               - Start project in development mode"
+	@echo "  build             - Build the project and create a deployable JAR file"
 	@echo "  container-build   - Build project in containers and create container images"
 	@echo "  container-run     - Run those containers"
 	@echo "  container-stop    - Stop project containers"

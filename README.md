@@ -1,39 +1,37 @@
 # Inspirational Morning
 
-Send a good morning message to your Google Chat webhook. The message would include the day of the week, a quote, and the author of the quote. Quote and its author is fetched using [ZenQuotes API](https://zenquotes.io/).
+Send a good morning message to your Google Chat webhook (only Workspace accounts are supported). The message would include the day of the week, a quote, and the author of the quote. Quote and its author is fetched using [ZenQuotes API](https://zenquotes.io/).
 
-## Running dev mode
-
-You can run your application in dev mode that enables live coding using below. Dev UI should be accessible at [http://localhost:3005/q/dev-ui/](http://localhost:3005/q/dev-ui/).
-
-```shell
-make dev
-```
-
-## Local packaging and running
+## Local dev
 
 1. Get the desired GChat webhook URL. You can register a webhook by following the [Google Chat webhooks documentation](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook).
 
-2. Save the webhook URL, and optionally a time zone, in the [.env](./.env) file in the root of the project. For example:
+2. Save the webhook URL, and optionally a [time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), in the [.env](./.env) file in the root of the project. For example:
 
    ```env
-   GSPACE_WEBHOOK=https://chat.googleapis.com/v1/spaces/XXXXXXXXXX/messages?key=YYYYYYYYYY&token=ZZZZZZZZZZ
+   GSPACE_WEBHOOK=https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN
    TIMEZONE=Pacific/Midway
    ```
 
-3. Build and run the application in a container.
+3. You may run the application in dev mode,
+
+   ```shell
+   make dev
+   ```
+
+   Or in a container using
 
    ```shell
    make container-run
    ```
 
-4. Once the container is running, hit the exposed ReST endpoint to send the greeting
+4. Once the container is running, hit the exposed REST endpoint to send the greeting.
 
    ```shell
    curl --silent --request POST --location http://localhost:3005/api/greet | jq
    ```
 
-5. To cleanup, stop and remove the container
+5. To clean up, stop and remove the container and the image.
 
    ```shell
    make container-destroy
@@ -41,13 +39,19 @@ make dev
 
 ## Deploy to Google Cloud Functions
 
-1. Create up a Pub/Sub topic.
+1. Build the application. This will create a deployable JAR file in the `target/deployment` directory.
+
+   ```shell
+   make build
+   ```
+
+2. Create up a Pub/Sub topic.
 
    ```shell
    gcloud pubsub topics create topic-inspirational-morning
    ```
 
-2. Create a cron job schedule for every weekday at 08:00.
+3. Create a cron job schedule for every weekday at 08:00.
 
    ```shell
    gcloud scheduler jobs create pubsub schedule-job-inspirational-morning \
@@ -58,7 +62,7 @@ make dev
       --location="us-central1"
    ```
 
-3. Deploy the application as a Cloud Function
+4. Deploy the application as a Cloud Function
 
    ```shell
    gcloud functions deploy inspirational-morning \
@@ -75,7 +79,7 @@ make dev
       --set-env-vars=TIMEZONE="Pacific/Auckland",GSPACE_WEBHOOK="https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
    ```
 
-4. [OPTIONAL] Trigger the job manually
+5. [OPTIONAL] Trigger the job manually
 
    ```shell
    gcloud scheduler jobs run schedule-job-inspirational-morning --location="us-central1"
@@ -104,3 +108,4 @@ make dev
 ## Reference guides
 
 -  [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+-  [Creating Google Chat webhook](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook)
