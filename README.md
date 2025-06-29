@@ -1,6 +1,9 @@
 # Inspirational Morning
 
-Send a good morning message to your Google Chat webhook (only Workspace accounts are supported). The message would include the day of the week, a quote, and the author of the quote. Quote and its author is fetched using [ZenQuotes API](https://zenquotes.io/).
+Send a good morning message to your Google Chat webhook. The message would include the day of the week, a quote, and the author of the quote. Quote and its author is fetched using [ZenQuotes API](https://zenquotes.io/).
+
+> [!NOTE]
+> Google Chat webhook only supports Google Workspace accounts.
 
 ## Local dev
 
@@ -107,5 +110,5 @@ Send a good morning message to your Google Chat webhook (only Workspace accounts
 
 ## Reference guides
 
--  [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
--  [Creating Google Chat webhook](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook)
+- [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+- [Creating Google Chat webhook](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook)
