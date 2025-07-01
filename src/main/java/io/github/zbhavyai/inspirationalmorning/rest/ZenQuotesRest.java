@@ -1,7 +1,7 @@
-package io.github.zbhavyai.rest;
+package io.github.zbhavyai.inspirationalmorning.rest;
 
-import io.github.zbhavyai.models.ZenQuote;
-import io.github.zbhavyai.service.ZenQuotesService;
+import io.github.zbhavyai.inspirationalmorning.models.ZenQuote;
+import io.github.zbhavyai.inspirationalmorning.service.ZenQuotesService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;

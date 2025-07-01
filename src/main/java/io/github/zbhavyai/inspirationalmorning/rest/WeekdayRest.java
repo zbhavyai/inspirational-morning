@@ -1,6 +1,6 @@
-package io.github.zbhavyai.rest;
+package io.github.zbhavyai.inspirationalmorning.rest;
 
-import io.github.zbhavyai.service.WeekdayService;
+import io.github.zbhavyai.inspirationalmorning.service.WeekdayService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

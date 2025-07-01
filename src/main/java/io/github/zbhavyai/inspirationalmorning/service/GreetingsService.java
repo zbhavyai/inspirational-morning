@@ -1,6 +1,6 @@
-package io.github.zbhavyai.service;
+package io.github.zbhavyai.inspirationalmorning.service;
 
-import io.github.zbhavyai.models.GChatMsgResponse;
+import io.github.zbhavyai.inspirationalmorning.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

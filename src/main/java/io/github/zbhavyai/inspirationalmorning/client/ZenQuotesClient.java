@@ -1,4 +1,4 @@
-package io.github.zbhavyai.client;
+package io.github.zbhavyai.inspirationalmorning.client;
 
 import io.quarkus.rest.client.reactive.ClientQueryParam;
 import io.smallrye.mutiny.Uni;

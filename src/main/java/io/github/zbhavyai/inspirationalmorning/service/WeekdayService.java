@@ -1,4 +1,4 @@
-package io.github.zbhavyai.service;
+package io.github.zbhavyai.inspirationalmorning.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

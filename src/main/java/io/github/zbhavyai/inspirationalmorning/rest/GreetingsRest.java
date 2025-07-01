@@ -1,7 +1,7 @@
-package io.github.zbhavyai.rest;
+package io.github.zbhavyai.inspirationalmorning.rest;
 
-import io.github.zbhavyai.models.GChatMsgResponse;
-import io.github.zbhavyai.service.GreetingsService;
+import io.github.zbhavyai.inspirationalmorning.models.GChatMsgResponse;
+import io.github.zbhavyai.inspirationalmorning.service.GreetingsService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;

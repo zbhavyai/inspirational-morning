@@ -1,4 +1,4 @@
-package io.github.zbhavyai.models;
+package io.github.zbhavyai.inspirationalmorning.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.runtime.annotations.RegisterForReflection;

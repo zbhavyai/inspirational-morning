@@ -1,8 +1,8 @@
-package io.github.zbhavyai.service;
+package io.github.zbhavyai.inspirationalmorning.service;
 
-import io.github.zbhavyai.client.GChatClient;
-import io.github.zbhavyai.models.GChatMsgRequest;
-import io.github.zbhavyai.models.GChatMsgResponse;
+import io.github.zbhavyai.inspirationalmorning.client.GChatClient;
+import io.github.zbhavyai.inspirationalmorning.models.GChatMsgRequest;
+import io.github.zbhavyai.inspirationalmorning.models.GChatMsgResponse;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;

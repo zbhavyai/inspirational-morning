@@ -1,7 +1,7 @@
-package io.github.zbhavyai.service;
+package io.github.zbhavyai.inspirationalmorning.service;
 
-import io.github.zbhavyai.client.ZenQuotesClient;
-import io.github.zbhavyai.models.ZenQuote;
+import io.github.zbhavyai.inspirationalmorning.client.ZenQuotesClient;
+import io.github.zbhavyai.inspirationalmorning.models.ZenQuote;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

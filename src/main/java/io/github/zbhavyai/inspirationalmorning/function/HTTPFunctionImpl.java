@@ -1,9 +1,9 @@
-package io.github.zbhavyai.function;
+package io.github.zbhavyai.inspirationalmorning.function;
 
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
 import com.google.cloud.functions.HttpResponse;
-import io.github.zbhavyai.service.GreetingsService;
+import io.github.zbhavyai.inspirationalmorning.service.GreetingsService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;

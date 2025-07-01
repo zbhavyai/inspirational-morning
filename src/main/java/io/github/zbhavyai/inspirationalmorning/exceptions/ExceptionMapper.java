@@ -1,6 +1,6 @@
-package io.github.zbhavyai.exceptions;
+package io.github.zbhavyai.inspirationalmorning.exceptions;
 
-import io.github.zbhavyai.models.ErrorResponse;
+import io.github.zbhavyai.inspirationalmorning.models.ErrorResponse;
 import jakarta.ws.rs.ServiceUnavailableException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
