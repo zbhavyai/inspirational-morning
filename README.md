@@ -58,7 +58,7 @@ Send a good morning message to your Google Chat webhook. The message would inclu
 
    ```shell
    gcloud scheduler jobs create pubsub schedule-job-inspirational-morning \
-      --schedule="0 8 * * 0-5" \
+      --schedule="0 8 * * 1-5" \
       --topic=topic-inspirational-morning \
       --message-body="job is triggered" \
       --time-zone="Pacific/Auckland" \
@@ -110,5 +110,5 @@ Send a good morning message to your Google Chat webhook. The message would inclu
 
 ## Reference guides
 
-- [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-- [Creating Google Chat webhook](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook)
+-  [tz database Time Zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+-  [Creating Google Chat webhook](https://developers.google.com/workspace/chat/quickstart/webhooks#register-webhook)
